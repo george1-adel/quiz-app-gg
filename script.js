@@ -704,7 +704,18 @@ function showSystemConfirm(message, onOk, onCancel) {
 }
 
 function showTimerModal(questionCount) {
-    pendingQuestionCount = questionCount;
+    // إذا اختار "أسئلة الفصل كاملا"
+    if (questionCount === 'all') {
+        let filteredQuestions = window.questions;
+        if (isFullCurriculum) {
+            filteredQuestions = window.questions.slice();
+        } else if (selectedChapter) {
+            filteredQuestions = window.questions.filter(q => Number(q.chapter) === Number(selectedChapter));
+        }
+        pendingQuestionCount = filteredQuestions.length;
+    } else {
+        pendingQuestionCount = questionCount;
+    }
     const timerModal = document.getElementById('timer-modal');
     timerModal.style.display = 'flex';
 }
