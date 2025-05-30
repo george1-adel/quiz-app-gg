@@ -8,6 +8,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- نافذة التحديثات الجديدة -->
+    <div id="updates-modal" class="modal" style="display:flex; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:5000; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:32px 24px; border-radius:12px; max-width:90vw; min-width:320px; text-align:center; box-shadow:0 2px 16px #0002; position:relative;">
+            <h2 style="color:#3498db; margin-bottom:1rem;">🎉 تحديث جديد!</h2>
+            <div style="font-size:1.1rem; color:#222; margin-bottom:1.5rem;">
+                <b>تمت إضافة أسئلة جديدة وتعديلات وتحسينات على النظام.</b><br>
+                <ul style="text-align:right; margin:1rem 0 1.5rem 0; padding-right:1.5rem; color:#444; font-size:1rem;">
+                    <li>إضافة مجموعة أسئلة صح وخطأ واختيار من متعدد جديدة.</li>
+                    <li>تعديلات شكلية وتسهيلات في تجربة المستخدم.</li>
+                    <li>إصلاح بعض المشاكل البرمجية السابقة.</li>
+                </ul>
+                جرب الميزات الجديدة الآن!<br>
+                <a href="https://t.me/QuizAppgg" target="_blank" style="display:inline-block; margin:1rem 0 0.5rem 0; color:#0077b6; font-weight:bold; text-decoration:underline; font-size:1.08rem;">انضم لجروب التليجرام الخاص بالتحديثات والأخبار</a><br>
+                <span style="color:#888; font-size:0.95rem;">(ده الجروب اللي هينزل عليه أخبار التحديثات والمواد الجديدة وكل جديد في التطبيق)</span><br>
+                <span style="color:#888; font-size:0.95rem;">(يمكنك إغلاق هذه النافذة للمتابعة)</span>
+            </div>
+            <button id="close-updates-modal" class="btn" style="min-width:120px; font-size:1.1rem;">حسناً</button>
+        </div>
+    </div>
+    </div>
     <div class="container">
         <div id="welcome-page" class="page active">
             <h1>مرحبا بك في المدعكة</h1>
@@ -110,9 +130,20 @@
         </div>
     </div>
     <!-- زر info الدائري أسفل يسار الصفحة -->
-    <button id="info-btn" class="info-btn" title="إبلاغ عن مشكلة أو اقتراح">
+    <button id="info-btn" class="info-btn" title="جروب التليجرام للأخبار والتحديثات">
         <span style="font-weight:bold; font-family:sans-serif;">i</span>
     </button>
+    <!-- نافذة جروب التليجرام عند الضغط على i -->
+    <div id="telegram-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:6000; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:28px 18px; border-radius:12px; max-width:90vw; min-width:300px; text-align:center; box-shadow:0 2px 16px #0002; position:relative;">
+            <h3 style="color:#3498db; margin-bottom:1rem;">جروب التليجرام الرسمي</h3>
+            <div style="font-size:1.08rem; color:#222; margin-bottom:1.2rem;">
+                تابع كل أخبار التحديثات والمواد الجديدة على جروب التليجرام الخاص بالتطبيق 👇<br>
+                <a href="https://t.me/QuizAppgg" target="_blank" style="display:inline-block; margin:1rem 0 0.5rem 0; color:#0077b6; font-weight:bold; text-decoration:underline; font-size:1.08rem;">https://t.me/QuizAppgg</a>
+            </div>
+            <button id="close-telegram-modal" class="btn" style="min-width:100px; font-size:1rem;">إغلاق</button>
+        </div>
+    </div>
     <!-- زر إحصائية عدد الأسئلة المجاب عليها (جديد) -->
     <button id="solved-btn" class="star-btn" title="عدد الأسئلة التي أجبت عليها">
         <span style="font-weight:bold; font-family:sans-serif;">★</span>
@@ -161,6 +192,49 @@
     <script src="chapter5.js"></script>
     <script src="chapter6.js"></script>
     <script src="script.js"></script>
+    <script>
+    // نافذة التحديثات تظهر مرة واحدة فقط عند أول دخول (وليس بعد كتابة الاسم)
+    window.addEventListener('DOMContentLoaded', function() {
+        var modal = document.getElementById('updates-modal');
+        var closeBtn = document.getElementById('close-updates-modal');
+        // إذا كان المستخدم كتب اسمه من قبل، لا تظهر النافذة
+        var hasUsername = localStorage.getItem('quiz-username');
+        var updatesSeen = localStorage.getItem('updates-modal-seen');
+        if (modal && closeBtn) {
+            if (!hasUsername && !updatesSeen) {
+                modal.style.display = 'flex';
+            } else {
+                modal.style.display = 'none';
+            }
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+                localStorage.setItem('updates-modal-seen', '1');
+            };
+            // إغلاق النافذة عند الضغط خارجها
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    localStorage.setItem('updates-modal-seen', '1');
+                }
+            };
+        }
+        // نافذة جروب التليجرام عند الضغط على زر i
+        var infoBtn = document.getElementById('info-btn');
+        var telegramModal = document.getElementById('telegram-modal');
+        var closeTelegram = document.getElementById('close-telegram-modal');
+        if (infoBtn && telegramModal && closeTelegram) {
+            infoBtn.onclick = function() {
+                telegramModal.style.display = 'flex';
+            };
+            closeTelegram.onclick = function() {
+                telegramModal.style.display = 'none';
+            };
+            telegramModal.onclick = function(e) {
+                if (e.target === telegramModal) telegramModal.style.display = 'none';
+            };
+        }
+    });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </body>
