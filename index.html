@@ -197,24 +197,17 @@
     window.addEventListener('DOMContentLoaded', function() {
         var modal = document.getElementById('updates-modal');
         var closeBtn = document.getElementById('close-updates-modal');
-        // إذا كان المستخدم كتب اسمه من قبل، لا تظهر النافذة
-        var hasUsername = localStorage.getItem('quiz-username');
-        var updatesSeen = localStorage.getItem('updates-modal-seen');
+        // اجعل النافذة تظهر دائماً في صفحة الترحيب
         if (modal && closeBtn) {
-            if (!hasUsername && !updatesSeen) {
-                modal.style.display = 'flex';
-            } else {
-                modal.style.display = 'none';
-            }
+            // تظهر دائماً عند تحميل الصفحة الرئيسية (welcome-page)
+            modal.style.display = 'flex';
             closeBtn.onclick = function() {
                 modal.style.display = 'none';
-                localStorage.setItem('updates-modal-seen', '1');
             };
             // إغلاق النافذة عند الضغط خارجها
             modal.onclick = function(e) {
                 if (e.target === modal) {
                     modal.style.display = 'none';
-                    localStorage.setItem('updates-modal-seen', '1');
                 }
             };
         }
