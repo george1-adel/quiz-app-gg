@@ -1,3 +1,22 @@
+// زر الامتحان الأول: يعرض فقط أسئلة exam1 (40 سؤال)
+function selectExam1() {
+    // اجلب فقط الأسئلة التي مصدرها exam1Questions (مخزنة في window.exam1Questions)
+    if (typeof exam1Questions !== 'undefined') {
+        quizState.currentQuestions = [...exam1Questions];
+        quizState.userAnswers = new Array(exam1Questions.length).fill(null);
+        quizState.currentQuestionIndex = 0;
+        quizState.selectedChapter = 'exam1';
+        quizState.questionCount = exam1Questions.length;
+        quizState.isQuizInProgress = true;
+        saveQuizProgress();
+        showPage('quiz-page');
+        stopTimer();
+        updateTimerDisplay();
+        displayQuestion();
+    } else {
+        showSystemModal('حدث خطأ: لم يتم تحميل أسئلة الامتحان الأول.');
+    }
+}
 let currentQuestions = [];
 let userAnswers = [];
 let currentQuestionIndex = 0;
